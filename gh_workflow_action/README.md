@@ -3,14 +3,11 @@
 
 
 ## Audit Checks
-1. Workflow Audit 1 - Checks if thirdparty actions are pinned to commit sha 
 2. Workflow Audit 2 - Checking Self hosted Runner in Public Repo
-    - Only applicable for public repositories
 3. Workflow Audit 5 - Checking if risky actions is being used
 4. Workflow Audit 6.1 - Checking if risky contexts is being used
 5. Workflow Audit 6.2 - Checking if vulnerable envs is being used
 6. Workflow Audit 8 - Checking Verify User Workflow on Public Workflows
-    - Only applicable for public repositories
 
 ## Usage
 ```yaml
@@ -62,34 +59,6 @@ jobs:
 ```
 
 ## Fix/Mitigation 
-### Workflow Audit 1 - Checks if thirdparty actions are pinned to commit sha 
-1. Ensure that the third-party resusable actions are pinned to a specific commit sha value.
-2. By pinning it to a commit sha value, we can ensure that the code can't be tampered with by the maintainer.
-3. Reference - [Github Documentation](https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions#using-third-party-actions)
-    ```yaml 
-
-    name: Trivy Scanner
-
-    on:
-      pull_request:
-
-    jobs:
-      pinned_to_sha:
-        runs-on: ubuntu-latest
-        steps:
-          - name: 
-            uses: aquasecurity/trivy-action@b2933f565dbc598b29947660e66259e3c7bc8561  # Version needs to be pinned to a commit sha 
-            with:
-              scan-type: 'fs'
-              scan-ref: './base'
-              format: 'json'
-              output: 'base.json'
-              scanners: 'vuln,secret,misconfig'
-              exit-code: '0'
-              vuln-type: 'os,library'
-              severity: 'UNKNOWN,CRITICAL,HIGH'
-    ```
-
 ### Workflow Audit 2 - Checking Self hosted Runner in Public Repo
 1. Ensure that public repositories is not using self-hosted runners
 2. Avoid the use of Self Hosted Runner for Public facing repos as this opens up additional attack surface. 
